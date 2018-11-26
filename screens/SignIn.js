@@ -8,6 +8,9 @@ import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { updateUserData } from '../actions/userAction';
 
+//axios
+import axios from 'axios';
+
 //auth
 import { onSignIn } from '../auth';
 
@@ -17,7 +20,7 @@ class SignIn extends React.Component {
             <View style={{ paddingVertical: 20 }}>
                 <Formik
                     initialValues={{
-                        email: 'test@test.com',
+                        email: 'user1@test.com',
                         password: 'testtest',
                     }}
                     onSubmit={values => this.handleSignIn(values)}
@@ -80,40 +83,43 @@ class SignIn extends React.Component {
     }
 
     //サインインボタン押したとき
-    handleSignIn = (values) => {
+    handleSignIn = async (values) => {
 
         //値の取得
         const email = values.email;
         const password = values.password;
 
-        //ダミー認証
-        //実際はサーバサイドと連携したりする
-        if(email === 'test@test.com' && password === 'testtest'){
-            //とりあえずemailをtoken情報として渡しておく
-            onSignIn(email)
-                .then(()=>{
-                    //storeにユーザーデータ保存（更新）する
+        try {
+            
+            //emailとpasswordでtokenを取得
+            const request_token = await axios.post('http://localhost:8000/oauth/token', {
+                grant_type: 'password',
+                client_id: '2',
+                client_secret: '6kjaYUMN2xGHbLksa62IE9KhChZH4bcp4Bwxk9Zi',
+                username: email,
+                password: password
+            });
 
-                    //本当は認証後、ユーザーデータを取得する
-                    const user = {
-                        id: 1,
-                        name: 'test',
-                        email: email,
-                    }
-                    //更新
-                    this.props.updateUserData(user);
+            //token抽出
+            const access_token = request_token.data.access_token;
 
-                })
-                .then(()=>{
-                    //移動する
-                    this.props.navigation.navigate('SignedIn')
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }else{
-            alert('サインインに失敗しました。');
+            //取得したtokenを利用してuser情報を取得
+            const AuthStr = 'Bearer ' + access_token;
+            const user = await axios.get('http://localhost:8000/api/user', { 'headers': { 'Authorization': AuthStr } })
+
+            //取得したデータをstoreにセット
+            this.props.updateUserData(user.data);
+
+            //サインイン時の処理を実行
+            await onSignIn(access_token);
+
+            //移動
+            this.props.navigation.navigate('SignedIn')
+
+        } catch (error) {
+            console.log(error);
         }
+
     }
 
     //サインアップボタン押したとき
