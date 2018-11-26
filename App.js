@@ -14,6 +14,7 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
+import Forgot from './screens/Forgot';
 
 //Tab（ヘッダを表示するためstackを入れ子に）
 const HomeTab = createBottomTabNavigator(
@@ -34,7 +35,8 @@ const SignedIn = createDrawerNavigator(
 const SignedOut = createStackNavigator(
     {
         SignIn: { screen: SignIn },
-        SignUp: { screen: SignUp }
+        SignUp: { screen: SignUp },
+        Forgot: { screen: Forgot }
     }
 );
 

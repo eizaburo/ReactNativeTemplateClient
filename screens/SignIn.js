@@ -19,6 +19,11 @@ class SignIn extends React.Component {
                         buttonStyle={{ marginTop: 20 }}
                         backgroundColor='#03A9F4'
                     />
+                    <Button
+                        title='パスワード忘れ'
+                        onPress={() => this.handleForgot()}
+                        buttonStyle={{ marginTop: 30 }}
+                    />
                 </Card>
                 <Card title='サインアップ'>
                     <Button
@@ -40,6 +45,11 @@ class SignIn extends React.Component {
     //サインアップボタン押したとき
     handleSignUp = () => {
         this.props.navigation.navigate('SignUp')
+    }
+
+    //Forgotボタン押したとき
+    handleForgot = () => {
+        this.props.navigation.navigate('Forgot')
     }
 }
 
