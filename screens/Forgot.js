@@ -20,7 +20,17 @@ class Forgot extends React.Component {
                     }}
                     onSubmit={(values) => this.handleForgot(values)}
                     validationSchema={Yup.object().shape({
-                        email: Yup.string().email('emailの形式で入力して下さい。').required('emailは必須です。'),
+                        email: Yup.string()
+                            .email('emailの形式で入力して下さい。')
+                            .required('emailは必須です。')
+                            .test('mail_exist', 'メールが存在しません。', async (value) => {
+                                const res = await axios.post(Laravel.ISMAILEXIST_URL, { email: value });
+                                if(res.data.exist == true){
+                                    return true;
+                                }else{
+                                    return false;
+                                }
+                            }),
                     })}
                 >
                     {
