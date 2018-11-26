@@ -11,6 +11,11 @@ import axios from 'axios';
 import * as Laravel from '../laravel';
 
 class Forgot extends React.Component {
+
+    state = {
+        spinner: false,
+    }
+
     render() {
         return (
             <View style={{ paddingVertical: 20 }}>
@@ -25,9 +30,9 @@ class Forgot extends React.Component {
                             .required('emailは必須です。')
                             .test('mail_exist', 'メールが存在しません。', async (value) => {
                                 const res = await axios.post(Laravel.ISMAILEXIST_URL, { email: value });
-                                if(res.data.exist == true){
+                                if (res.data.exist == true) {
                                     return true;
-                                }else{
+                                } else {
                                     return false;
                                 }
                             }),
@@ -47,6 +52,7 @@ class Forgot extends React.Component {
                                     title='リセットメールを送信'
                                     onPress={handleSubmit}
                                     buttonStyle={{ marginTop: 20 }}
+                                    loading={this.state.spinner}
                                 />
                             </Card>
                         )
@@ -59,11 +65,20 @@ class Forgot extends React.Component {
     //サインアウトボタン押したとき
     handleForgot = async (values) => {
 
+        //spinner表示
+        this.setState({ spinner: true });
+
         try {
             //リセットメール送信をキック
             const reset = await axios.post(Laravel.PASSWORDREST_URL, { email: values.email });
+
+            //spinner停止
+            this.setState({ spinner: false });
+
             alert('メールを送信しました。');
         } catch (error) {
+            this.setState({ spinner: false });
+            //spinner停止
             alert('メール送信に失敗しました。');
             console.log(error);
         }
