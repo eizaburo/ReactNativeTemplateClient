@@ -4,6 +4,7 @@
 
 ReactNativeを利用したクライアント（アプリ）のテンプレート。
 アプリに共通な基本機能をダミー実装している。なお、本番利用のためにはサーバ側を実装し連携することを前提としている。
+Laravelと連携するバージョンは[withLaravelブランチ](https://github.com/eizaburo/ReactNativeTemplateClient/tree/withLaravel)をcloneして下さい。
 
 実装している機能は以下の通り。
 
