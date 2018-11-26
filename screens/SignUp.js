@@ -4,6 +4,10 @@ import { Button, FormLabel, FormInput, FormValidationMessage, Card } from 'react
 import { Formik, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 
+//redux
+import { connect } from 'react-redux';
+import { updateUserData } from '../actions/userAction';
+
 //auth
 import { onSignIn } from '../auth';
 
@@ -105,6 +109,16 @@ class SignUp extends React.Component {
         //登録が成功したら、登録情報をもとにサインインする
         onSignIn(email)
             .then(() => {
+                //user情報を取得（実際はサインアップ後、サーバから取得）
+                const user = {
+                    id: 1,
+                    name: name,
+                    email: email,
+                }
+                //storeを更新
+                this.props.updateUserData(user);
+            })
+            .then(() => {
                 //移動する
                 this.props.navigation.navigate('SignedIn')
             })
@@ -114,4 +128,18 @@ class SignUp extends React.Component {
     }
 }
 
-export default SignUp;
+//redux
+const mapStateToProps = state => (
+    {
+        state: state,
+    }
+);
+
+const mapDispatchToProps = dispatch => (
+    {
+        updateUserData: (user) => dispatch(updateUserData(user)),
+    }
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+// export default SignUp;

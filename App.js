@@ -9,6 +9,10 @@ import {
     createAppContainer
 } from 'react-navigation';
 
+//redux
+import { Provider } from 'react-redux';
+import createStore from './createStore';
+
 //auth
 import { isSignIn } from './auth';
 
@@ -56,6 +60,9 @@ const createRootNavigator = (signedIn = false) => {
     );
 }
 
+//store
+const store = createStore();
+
 //App
 export default class App extends React.Component {
 
@@ -83,11 +90,13 @@ export default class App extends React.Component {
         //サインインの情報を取得
         const { checkSignIn, signedIn } = this.state;
         //チェックが終わってない場合は何も返さない
-        if(!checkSignIn) return null;
+        if (!checkSignIn) return null;
         //サインインの状態によりSwitch
         const Layout = createAppContainer(createRootNavigator(signedIn));
         return (
-            <Layout />
+            <Provider store={store}>
+                <Layout />
+            </Provider>
         );
     }
 }
