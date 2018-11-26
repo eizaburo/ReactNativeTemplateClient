@@ -9,6 +9,9 @@ import {
     createAppContainer
 } from 'react-navigation';
 
+//auth
+import { isSignIn } from './auth';
+
 //各screenの読み込み
 import Home from './screens/Home';
 import Profile from './screens/Profile';
@@ -55,8 +58,34 @@ const createRootNavigator = (signedIn = false) => {
 
 //App
 export default class App extends React.Component {
+
+    //ローカルステート管理
+    state = {
+        signedIn: false,
+        checkSignIn: false,
+    }
+
+    componentDidMount() {
+        //サインインの状態を取得
+        isSignIn()
+            .then(res => {
+                this.setState({
+                    signedIn: res.signedIn,
+                    checkSignIn: true
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
     render() {
-        const Layout = createAppContainer(createRootNavigator(false));
+        //サインインの情報を取得
+        const { checkSignIn, signedIn } = this.state;
+        //チェックが終わってない場合は何も返さない
+        if(!checkSignIn) return null;
+        //サインインの状態によりSwitch
+        const Layout = createAppContainer(createRootNavigator(signedIn));
         return (
             <Layout />
         );

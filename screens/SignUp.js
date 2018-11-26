@@ -4,16 +4,19 @@ import { Button, FormLabel, FormInput, FormValidationMessage, Card } from 'react
 import { Formik, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 
+//auth
+import { onSignIn } from '../auth';
+
 class SignUp extends React.Component {
     render() {
         return (
             <View style={{ paddingVertical: 20 }}>
                 <Formik
                     initialValues={{
-                        name: '',
-                        email: '',
-                        password: '',
-                        passwordConfirm: ''
+                        name: 'test',
+                        email: 'test@test.com',
+                        password: 'testtest',
+                        passwordConfirm: 'testtest'
                     }}
                     onSubmit={values => this.handleSignUp(values)}
                     validationSchema={Yup.object().shape({
@@ -87,8 +90,27 @@ class SignUp extends React.Component {
     }
 
     //サインアップボタン押したとき
-    handleSignUp = () => {
-        this.props.navigation.navigate('SignedIn')
+    handleSignUp = (values) => {
+
+        //値の取得
+        const name = values.name;
+        const email = values.email;
+        const password = values.password;
+        const passwordConfirm = values.passwordConfirm;
+
+        //登録処理
+        //実際にはサーバサイドと連携したりする
+
+        //サインイン処理
+        //登録が成功したら、登録情報をもとにサインインする
+        onSignIn(email)
+            .then(() => {
+                //移動する
+                this.props.navigation.navigate('SignedIn')
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 }
 
