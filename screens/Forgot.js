@@ -4,6 +4,12 @@ import { Button, FormLabel, FormInput, FormValidationMessage, Card } from 'react
 import { Formik, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 
+//axios
+import axios from 'axios';
+
+//laravel
+import * as Laravel from '../laravel';
+
 class Forgot extends React.Component {
     render() {
         return (
@@ -26,7 +32,7 @@ class Forgot extends React.Component {
                                     value={values.email}
                                     onChangeText={handleChange('email')}
                                 />
-                                {touched.email && <FormValidationMessage>{errors.email}</FormValidationMessage>}
+                                {(touched.email && errors.email) && <FormValidationMessage>{errors.email}</FormValidationMessage>}
                                 <Button
                                     title='リセットメールを送信'
                                     onPress={handleSubmit}
@@ -41,8 +47,16 @@ class Forgot extends React.Component {
     }
 
     //サインアウトボタン押したとき
-    handleForgot = () => {
-        alert('リセットメールを送信しました。')
+    handleForgot = async (values) => {
+
+        try {
+            //リセットメール送信をキック
+            const reset = await axios.post(Laravel.PASSWORDREST_URL, { email: values.email });
+            alert('メールを送信しました。');
+        } catch (error) {
+            alert('メール送信に失敗しました。');
+            console.log(error);
+        }
     }
 }
 

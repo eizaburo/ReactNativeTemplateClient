@@ -6,6 +6,7 @@ export const SERVER_URL = 'http://localhost:8000';
 export const TOKEN_URL = SERVER_URL + '/oauth/token';
 export const USER_URL = SERVER_URL + '/api/user';
 export const REGISTER_URL = SERVER_URL + '/api/register';
+export const PASSWORDREST_URL = SERVER_URL + '/api/password/email';
 
 //params
 export const GRANT_TYPE = 'password';
