@@ -14,6 +14,9 @@ import axios from 'axios';
 //auth
 import { onSignIn } from '../auth';
 
+//laravel
+import * as Laravel from '../laravel';
+
 class SignUp extends React.Component {
     render() {
         return (
@@ -108,7 +111,7 @@ class SignUp extends React.Component {
         try{
 
             //登録処理
-            const register = await axios.post('http://localhost:8000/api/register',{
+            const register = await axios.post(Laravel.REGISTER_URL,{
                 name: name,
                 email: email,
                 password: password
@@ -119,10 +122,10 @@ class SignUp extends React.Component {
 
             //登録したユーザーでtokenを取得
             //emailとpasswordでtokenを取得
-            const request_token = await axios.post('http://localhost:8000/oauth/token', {
-                grant_type: 'password',
-                client_id: '2',
-                client_secret: '6kjaYUMN2xGHbLksa62IE9KhChZH4bcp4Bwxk9Zi',
+            const request_token = await axios.post(Laravel.TOKEN_URL, {
+                grant_type: Laravel.GRANT_TYPE,
+                client_id: Laravel.CLIENT_ID,
+                client_secret: Laravel.CLIENT_SECRET,
                 username: email,
                 password: password
             });
@@ -132,7 +135,7 @@ class SignUp extends React.Component {
 
             //取得したtokenを利用してuser情報を取得
             const AuthStr = 'Bearer ' + access_token;
-            const user = await axios.get('http://localhost:8000/api/user', { 'headers': { 'Authorization': AuthStr } })
+            const user = await axios.get(Laravel.USER_URL, { 'headers': { 'Authorization': AuthStr } })
 
             //取得したデータをstoreにセット
             this.props.updateUserData(user.data);
