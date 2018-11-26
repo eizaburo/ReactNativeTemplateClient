@@ -8,6 +8,9 @@ import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { updateUserData } from '../actions/userAction';
 
+//axios
+import axios from 'axios';
+
 //auth
 import { onSignIn } from '../auth';
 
@@ -94,7 +97,7 @@ class SignUp extends React.Component {
     }
 
     //サインアップボタン押したとき
-    handleSignUp = (values) => {
+    handleSignUp = async (values) => {
 
         //値の取得
         const name = values.name;
@@ -102,29 +105,49 @@ class SignUp extends React.Component {
         const password = values.password;
         const passwordConfirm = values.passwordConfirm;
 
-        //登録処理
-        //実際にはサーバサイドと連携したりする
+        try{
 
-        //サインイン処理
-        //登録が成功したら、登録情報をもとにサインインする
-        onSignIn(email)
-            .then(() => {
-                //user情報を取得（実際はサインアップ後、サーバから取得）
-                const user = {
-                    id: 1,
-                    name: name,
-                    email: email,
-                }
-                //storeを更新
-                this.props.updateUserData(user);
-            })
-            .then(() => {
-                //移動する
-                this.props.navigation.navigate('SignedIn')
-            })
-            .catch(error => {
-                console.log(error);
+            //登録処理
+            const register = await axios.post('http://localhost:8000/api/register',{
+                name: name,
+                email: email,
+                password: password
             });
+
+            //ユーザー情報取得（再取得しなくても帰ってくるが、tokenを取得したので利用しない）。
+            // const user = register.data.user;
+
+            //登録したユーザーでtokenを取得
+            //emailとpasswordでtokenを取得
+            const request_token = await axios.post('http://localhost:8000/oauth/token', {
+                grant_type: 'password',
+                client_id: '2',
+                client_secret: '6kjaYUMN2xGHbLksa62IE9KhChZH4bcp4Bwxk9Zi',
+                username: email,
+                password: password
+            });
+
+            //token抽出
+            const access_token = request_token.data.access_token;
+
+            //取得したtokenを利用してuser情報を取得
+            const AuthStr = 'Bearer ' + access_token;
+            const user = await axios.get('http://localhost:8000/api/user', { 'headers': { 'Authorization': AuthStr } })
+
+            //取得したデータをstoreにセット
+            this.props.updateUserData(user.data);
+
+            //サインイン時の処理を実行
+            await onSignIn(access_token);
+
+            //移動
+            this.props.navigation.navigate('SignedIn')
+
+        }catch(error){
+            alert('登録に失敗しました。');
+            console.log(error);
+        }
+        
     }
 }
 

@@ -90,7 +90,6 @@ class SignIn extends React.Component {
         const password = values.password;
 
         try {
-            
             //emailとpasswordでtokenを取得
             const request_token = await axios.post('http://localhost:8000/oauth/token', {
                 grant_type: 'password',
