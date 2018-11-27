@@ -8,9 +8,6 @@ import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { updateUserData } from '../actions/userAction';
 
-//auth
-import { onSignIn } from '../auth';
-
 class SignUp extends React.Component {
     render() {
         return (
@@ -106,25 +103,18 @@ class SignUp extends React.Component {
         //実際にはサーバサイドと連携したりする
 
         //サインイン処理
-        //登録が成功したら、登録情報をもとにサインインする
-        onSignIn(email)
-            .then(() => {
-                //user情報を取得（実際はサインアップ後、サーバから取得）
-                const user = {
-                    id: 1,
-                    name: name,
-                    email: email,
-                }
-                //storeを更新
-                this.props.updateUserData(user);
-            })
-            .then(() => {
-                //移動する
-                this.props.navigation.navigate('SignedIn')
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        const user = {
+            id: 99,
+            name: name,
+            email: email,
+            access_token: 'token',
+        }
+
+        //更新
+        this.props.updateUserData(user);
+
+        //移動
+        this.props.navigation.navigate('SignedIn')
     }
 }
 

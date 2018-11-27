@@ -8,9 +8,6 @@ import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { updateUserData } from '../actions/userAction';
 
-//auth
-import { onSignIn } from '../auth';
-
 class SignIn extends React.Component {
     render() {
         return (
@@ -88,30 +85,23 @@ class SignIn extends React.Component {
 
         //ダミー認証
         //実際はサーバサイドと連携したりする
-        if(email === 'test@test.com' && password === 'testtest'){
-            //とりあえずemailをtoken情報として渡しておく
-            onSignIn(email)
-                .then(()=>{
-                    //storeにユーザーデータ保存（更新）する
+        if (email === 'test@test.com' && password === 'testtest') {
 
-                    //本当は認証後、ユーザーデータを取得する
-                    const user = {
-                        id: 1,
-                        name: 'test',
-                        email: email,
-                    }
-                    //更新
-                    this.props.updateUserData(user);
+            //サインイン処理用データ（access_tokenに何かあればサイン状態）
+            const user = {
+                id: 88,
+                name: 'dummy',
+                email: email,
+                access_token: 'token',
+            }
 
-                })
-                .then(()=>{
-                    //移動する
-                    this.props.navigation.navigate('SignedIn')
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }else{
+            //更新
+            this.props.updateUserData(user);
+
+            //移動
+            this.props.navigation.navigate('SignedIn')
+
+        } else {
             alert('サインインに失敗しました。');
         }
     }
