@@ -33,21 +33,15 @@ git clone -b withLaravel url
 
 なお、このリポジトリにはTagが切られています。
 
-1-1: 初期状態
-
-1-2: screenを作成しHomeを表示
-
-1-3: Navigation構造作成
-
-1-4: デザイン適用とリンク設置
-
-1-5: パスワード忘れボタン＋画面を追加
-
-1-6: Formikを導入し最低限のバリデーション
-
-1-7: ダミー認証実装
-
-1-8: Reduxの導入。サインインユーザー情報を更新しProfileに表示
+* 1-1: 初期状態
+* 1-2: screenを作成しHomeを表示
+* 1-3: Navigation構造作成
+* 1-4: デザイン適用とリンク設置
+* 1-5: パスワード忘れボタン＋画面を追加
+* 1-6: Formikを導入し最低限のバリデーション
+* 1-7: ダミー認証実装
+* 1-8: Reduxの導入。サインインユーザー情報を更新しProfileに表示
+* 1-9: エラーメッセージ領域の影響でフォームがずれるのを修正（バグ修正）
 
 ### 比較
 
@@ -60,6 +54,7 @@ git clone -b withLaravel url
 * [1-5と1-6](https://github.com/eizaburo/ReactNativeTemplateClient/compare/df329bbd9def1738de667ca3b356410990d28565...b8a0bf8f4d41eccbc96e591b347b8ef5fceccb58)
 * [1-6と1-7](https://github.com/eizaburo/ReactNativeTemplateClient/compare/b8a0bf8f4d41eccbc96e591b347b8ef5fceccb58...3ef0cb67bda364f4df16fec3c4f88af21c6cda2b)
 * [1-7と1-8](https://github.com/eizaburo/ReactNativeTemplateClient/compare/3ef0cb67bda364f4df16fec3c4f88af21c6cda2b...7fadd95750714dcccec17a2f1e9722f844fe0b3b)
+* [1-8と1-9](https://github.com/eizaburo/ReactNativeTemplateClient/compare/7fadd95750714dcccec17a2f1e9722f844fe0b3b...fd91f84a0475cd08d3079fdd1cf0baac479a2abe)
 
 
 ### 改善点
