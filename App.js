@@ -1,18 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { Button, FormLabel, FormInput, FormValidationMessage, Card } from 'react-native-elements';
 import {
     createStackNavigator,
     createBottomTabNavigator,
     createDrawerNavigator,
     createSwitchNavigator,
     DrawerItems,
-    createAppContainer
+    createAppContainer,
+    NavigationActions
 } from 'react-navigation';
 
 //redux
 import { Provider } from 'react-redux';
 import createStore from './createStore';
 import { connect } from 'react-redux';
+import { updateUserData } from './actions/userAction';
+const mapStateToProps = state => ({ state: state });
+const mapDispatchToProps = dispatch => ({ updateUserData: (user) => dispatch(updateUserData(user)) });
 
 //persist
 import { PersistGate } from 'redux-persist/integration/react';
@@ -36,6 +41,20 @@ const HomeTab = createBottomTabNavigator(
 const SignedIn = createDrawerNavigator(
     {
         Home: { screen: HomeTab }
+    },
+    {
+        contentComponent: (props) => (
+            <View style={{ flex: 1 }}>
+                <SafeAreaView>
+                    {/* <DrawerItems {...props} /> */}
+                    <Button
+                        title='サインアウト'
+                        onPress={() => alert('SignedOut')}
+                        buttonStyle={{ marginVertical: 20 }}
+                    />
+                </SafeAreaView>
+            </View>
+        )
     }
 );
 
@@ -53,22 +72,20 @@ class SwitchLayout extends React.Component {
     render() {
         let signedIn = false;
         const stored_access_token = this.props.state.userData.user.access_token;
-        if(stored_access_token !== '' && stored_access_token !== undefined) signedIn = true;
+        if (stored_access_token !== '' && stored_access_token !== undefined) signedIn = true;
 
-        const SignedInContainer = createAppContainer(SignedIn);
-        const SignedOutContainer = createAppContainer(SignedOut);
+        const SignedInAppContainer = createAppContainer(SignedIn);
+        const SignedOutAppContainer = createAppContainer(SignedOut);
 
-        if(signedIn){
-            return(<SignedInContainer/>);
-        }else{
-            return(<SignedOutContainer/>);
+        if (signedIn) {
+            return (<SignedInAppContainer />);
+        } else {
+            return (<SignedOutAppContainer />);
         }
 
     }
 }
-
-const mapStateToProps = state => ({ state: state });
-const SiwtchLayoutContainer = connect(mapStateToProps,null)(SwitchLayout);
+const SiwtchLayoutContainer = connect(mapStateToProps, null)(SwitchLayout);
 
 //store & persistor
 const { store, persistor } = createStore();
