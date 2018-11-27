@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Button, FormLabel, FormInput, FormValidationMessage, Card } from 'react-native-elements';
 
 //redux
@@ -9,31 +9,33 @@ import { updateUserData } from '../actions/userAction';
 class Profile extends React.Component {
     render() {
         return (
-            <View style={{ paddingVertical: 20 }}>
-                <Card title='ユーザー情報'>
-                <FormLabel>ID</FormLabel>
-                    <FormInput
-                        value={this.props.state.userData.user.id}
-                        editable={false}
-                    />
-                    <FormLabel>Name</FormLabel>
-                    <FormInput
-                        value={this.props.state.userData.user.name}
-                        editable={false}
-                    />
-                    <FormLabel>Email</FormLabel>
-                    <FormInput
-                        value={this.props.state.userData.user.email}
-                        editable={false}
-                    />
-                </Card>
-                <Card title='サインアウト'>
-                    <Button
-                        title='サインアウト'
-                        onPress={() => this.handleSignOut()}
-                        buttonStyle={{ marginTop: 20 }}
-                    />
-                </Card>
+            <View style={{ paddingVertical: 20, flex: 1 }}>
+                <ScrollView>
+                    <Card title='ユーザー情報'>
+                        <FormLabel>ID</FormLabel>
+                        <FormInput
+                            value={this.props.state.userData.user.id}
+                            editable={false}
+                        />
+                        <FormLabel>Name</FormLabel>
+                        <FormInput
+                            value={this.props.state.userData.user.name}
+                            editable={false}
+                        />
+                        <FormLabel>Email</FormLabel>
+                        <FormInput
+                            value={this.props.state.userData.user.email}
+                            editable={false}
+                        />
+                    </Card>
+                    <Card title='サインアウト'>
+                        <Button
+                            title='サインアウト'
+                            onPress={() => this.handleSignOut()}
+                            buttonStyle={{ marginTop: 20 }}
+                        />
+                    </Card>
+                </ScrollView>
             </View>
         );
     }
