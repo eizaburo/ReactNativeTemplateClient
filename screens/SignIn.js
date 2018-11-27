@@ -119,6 +119,11 @@ class SignIn extends React.Component {
             this.props.navigation.navigate('SignedIn')
 
         } catch (error) {
+            if (error.message === 'Network Error') {
+                alert('サーバに接続できません。');
+            } else {
+                alert('サインインできませんでした。');
+            }
             console.log(error);
         }
 

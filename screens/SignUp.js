@@ -23,8 +23,8 @@ class SignUp extends React.Component {
             <View style={{ paddingVertical: 20 }}>
                 <Formik
                     initialValues={{
-                        name: 'test',
-                        email: 'test@test.com',
+                        name: 'user1',
+                        email: 'user1@test.com',
                         password: 'testtest',
                         passwordConfirm: 'testtest'
                     }}
