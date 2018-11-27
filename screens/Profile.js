@@ -6,9 +6,6 @@ import { Button, FormLabel, FormInput, FormValidationMessage, Card } from 'react
 import { connect } from 'react-redux';
 import { updateUserData } from '../actions/userAction';
 
-//auth
-import { onSignOut } from '../auth';
-
 class Profile extends React.Component {
     render() {
         return (
@@ -44,14 +41,19 @@ class Profile extends React.Component {
     //サインアウトボタン押したとき
     handleSignOut = () => {
 
-        //サインアウト処理（tokenを消去して移動）
-        onSignOut()
-            .then(()=>{
-                this.props.navigation.navigate('SignedOut')
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        //更新用userデータ
+        const user = {
+            id: 0,
+            name: '',
+            email: '',
+            access_token: '',
+        }
+
+        //更新
+        this.props.updateUserData(user);
+
+        //移動
+        this.props.navigation.navigate('SignedOut')
     }
 }
 

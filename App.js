@@ -12,9 +12,10 @@ import {
 //redux
 import { Provider } from 'react-redux';
 import createStore from './createStore';
+import { connect } from 'react-redux';
 
-//auth
-import { isSignIn } from './auth';
+//persist
+import { PersistGate } from 'redux-persist/integration/react';
 
 //各screenの読み込み
 import Home from './screens/Home';
@@ -47,55 +48,39 @@ const SignedOut = createStackNavigator(
     }
 );
 
-//Switch
-const createRootNavigator = (signedIn = false) => {
-    return createSwitchNavigator(
-        {
-            SignedIn: { screen: SignedIn },
-            SignedOut: { screen: SignedOut }
-        },
-        {
-            initialRouteName: signedIn ? 'SignedIn' : 'SignedOut'
+//switch layout
+class SwitchLayout extends React.Component {
+    render() {
+        let signedIn = false;
+        const stored_access_token = this.props.state.userData.user.access_token;
+        if(stored_access_token !== '' && stored_access_token !== undefined) signedIn = true;
+
+        const SignedInContainer = createAppContainer(SignedIn);
+        const SignedOutContainer = createAppContainer(SignedOut);
+
+        if(signedIn){
+            return(<SignedInContainer/>);
+        }else{
+            return(<SignedOutContainer/>);
         }
-    );
+
+    }
 }
 
-//store
-const store = createStore();
+const mapStateToProps = state => ({ state: state });
+const SiwtchLayoutContainer = connect(mapStateToProps,null)(SwitchLayout);
+
+//store & persistor
+const { store, persistor } = createStore();
 
 //App
 export default class App extends React.Component {
-
-    //ローカルステート管理
-    state = {
-        signedIn: false,
-        checkSignIn: false,
-    }
-
-    componentDidMount() {
-        //サインインの状態を取得
-        isSignIn()
-            .then(res => {
-                this.setState({
-                    signedIn: res.signedIn,
-                    checkSignIn: true
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
     render() {
-        //サインインの情報を取得
-        const { checkSignIn, signedIn } = this.state;
-        //チェックが終わってない場合は何も返さない
-        if (!checkSignIn) return null;
-        //サインインの状態によりSwitch
-        const Layout = createAppContainer(createRootNavigator(signedIn));
         return (
             <Provider store={store}>
-                <Layout />
+                <PersistGate loading={null} persistor={persistor}>
+                    <SiwtchLayoutContainer />
+                </PersistGate>
             </Provider>
         );
     }
