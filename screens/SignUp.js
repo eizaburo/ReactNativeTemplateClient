@@ -11,7 +11,7 @@ import { updateUserData } from '../actions/userAction';
 class SignUp extends React.Component {
     render() {
         return (
-            <View style={{ paddingVertical: 20, flex:1 }}>
+            <View style={{ paddingVertical: 20, flex: 1 }}>
                 <KeyboardAvoidingView behavior="position">
                     <ScrollView>
                         <Formik
