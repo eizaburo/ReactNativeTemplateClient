@@ -28,6 +28,7 @@ import Profile from './screens/Profile';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import Forgot from './screens/Forgot';
+import Drawer from './screens/Drawer';
 
 //Tab（ヘッダを表示するためstackを入れ子に）
 const HomeTab = createBottomTabNavigator(
@@ -43,18 +44,7 @@ const SignedIn = createDrawerNavigator(
         Home: { screen: HomeTab }
     },
     {
-        contentComponent: (props) => (
-            <View style={{ flex: 1 }}>
-                <SafeAreaView>
-                    {/* <DrawerItems {...props} /> */}
-                    <Button
-                        title='サインアウト'
-                        onPress={() => alert('SignedOut')}
-                        buttonStyle={{ marginVertical: 20 }}
-                    />
-                </SafeAreaView>
-            </View>
-        )
+        contentComponent: Drawer,
     }
 );
 
